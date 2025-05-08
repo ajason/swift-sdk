@@ -9,43 +9,43 @@ import Logging
     import FoundationNetworking
 #endif
 
-/// An implementation of the MCP Streamable HTTP transport protocol for clients.
+/// MCP 可流式 HTTP 传输协议的客户端实现。
 ///
-/// This transport implements the [Streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http)
-/// specification from the Model Context Protocol.
+/// 该传输实现了 Model Context Protocol 中的[可流式 HTTP 传输](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http)
+/// 规范。
 ///
-/// It supports:
-/// - Sending JSON-RPC messages via HTTP POST requests
-/// - Receiving responses via both direct JSON responses and SSE streams
-/// - Session management using the `Mcp-Session-Id` header
-/// - Automatic reconnection for dropped SSE streams
-/// - Platform-specific optimizations for different operating systems
+/// 它支持：
+/// - 通过 HTTP POST 请求发送 JSON-RPC 消息
+/// - 通过直接 JSON 响应和 SSE 流接收响应
+/// - 使用 `Mcp-Session-Id` 头部进行会话管理
+/// - 对断开的 SSE 流进行自动重连
+/// - 针对不同操作系统的平台特定优化
 ///
-/// The transport supports two modes:
-/// - Regular HTTP (`streaming=false`): Simple request/response pattern
-/// - Streaming HTTP with SSE (`streaming=true`): Enables server-to-client push messages
+/// 该传输支持两种模式：
+/// - 常规 HTTP (`streaming=false`)：简单的请求/响应模式
+/// - 带 SSE 的流式 HTTP (`streaming=true`)：支持服务器到客户端的推送消息
 ///
-/// - Important: Server-Sent Events (SSE) functionality is not supported on Linux platforms.
+/// - 重要：Linux 平台不支持 Server-Sent Events (SSE) 功能。
 ///
-/// ## Example Usage
+/// ## 使用示例
 ///
 /// ```swift
 /// import MCP
 ///
-/// // Create a streaming HTTP transport
+/// // 创建一个流式 HTTP 传输
 /// let transport = HTTPClientTransport(
 ///     endpoint: URL(string: "http://localhost:8080")!,
 /// )
 ///
-/// // Initialize the client with streaming transport
+/// // 使用流式传输初始化客户端
 /// let client = Client(name: "MyApp", version: "1.0.0")
 /// try await client.connect(transport: transport)
 ///
-/// // Initialize the connection
+/// // 初始化连接
 /// let result = try await client.initialize()
 ///
-/// // The transport will automatically handle SSE events
-/// // and deliver them through the client's notification handlers
+/// // 传输将自动处理 SSE 事件
+/// // 并通过客户端的通知处理器传递它们
 /// ```
 public actor HTTPClientTransport: Transport {
     /// The server endpoint URL to connect to
